@@ -1,0 +1,77 @@
+# To define an array of Strins for example in a yaml properties file you just seperate each element with ','
+
+# Server Settings
+server.port: 8080
+
+# CORS Settings
+origins: http://localhost:4200
+
+# General Server Settings
+spring:
+  # Profile Name
+  profiles: dev
+  # Custom 404 Handling
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
+  # Database Settings
+  datasource:
+    url: jdbc:mysql://localhost:3306/usermanagementdemo
+    username: usermanagementdemoadmin
+    password: usermanagementdemoadmin2021
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        jdbc:
+          # Set timezone as UTC - so dates are stored as UTC and not local times
+          time_zone: UTC
+  # Jackson Configuration
+  jackson:
+    mapper:
+      # This is required to allow @JsonView annotation to work properly and provide different views
+      DEFAULT_VIEW_INCLUSION: true
+  # Servlet Properties for Max request/file size limit
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 2MB
+
+# JWT Configuration Properties
+jwt:
+  secret: XHZiugsakufgh#@RYcasafri215asa0fu290fhbIWAUGHRF@(*&GHFf2hjfoiaf@#R)$@QsvfazvshyFGV@#323sca
+  audience: spyrosalertas.gr
+  issuer: spyrosalertas.gr
+  token-header: Authorization
+  token-prefix: 'Bearer '
+  # Expiration time in milliseconds (1h) 1 second = 1000 milliseconds)
+  expiration-time: 3_600_000
+
+# Security Configuration Properties
+security-constants:
+  options: OPTIONS
+  # Time period (in milliseconds) untill account unlocks again (30 mins)
+  account-unlock-time: 1_800_000
+  # Time period before failed-attempts-allowed is reset (5 mins)
+  failed-attempts-period: 300_000
+  # How many failed attempts are allowed until account is locked
+  failed-attempts-allowed: 5
+
+# Upload file properties
+file:
+  supported-img-extensions: jpg, jpeg, png
+
+# Pagination default properties
+pagination:
+  page-default-size: 10
+  default-sort-field: username
+  default-order: ASC
+
+response-content-type: application/json;charset=UTF-8
+
+# When set to true - the database will be seeded with random data
+seed-db: false

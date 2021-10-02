@@ -1,0 +1,75 @@
+# Server Settings
+server.port: 8080
+
+# CORS Settings
+origins:
+
+# General Server Settings
+spring:
+  # Profile Name
+  profiles: prod
+  # Custom 404 Handling
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
+  # Database Settings
+  datasource:
+    url:
+    username:
+    password:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        jdbc:
+          # Set timezone as UTC - so dates are stored as UTC and not local times
+          time_zone: UTC
+  # Jackson Configuration
+  jackson:
+    mapper:
+      # This is required to allow @JsonView annotation to work properly and provide different views
+      DEFAULT_VIEW_INCLUSION: true
+  # Servlet Properties for Max request/file size limit
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 2MB
+
+# JWT Configuration Properties
+jwt:
+  secret:
+  audience: spyrosalertas.gr
+  issuer: spyrosalertas.gr
+  token-header: Authorization
+  token-prefix: 'Bearer '
+  # Expiration time in milliseconds (1h)
+  expiration-time: 3_600_000
+
+# Security Configuration Properties
+security-constants:
+  options: OPTIONS
+  # Time period (in milliseconds) untill account unlocks again
+  account-unlock-time:  1_800_000
+  # Time period before failed-attempts-allowed is reset
+  failed-attempts-period: 300_000
+  # How many failed attempts are allowed until account is locked
+  failed-attempts-allowed: 5
+
+# Upload file properties
+file:
+  supported-img-extensions: jpg, jpeg, png
+
+# Pagination default properties
+pagination:
+  page-default-size: 5
+  default-sort-field: username
+  default-order: ASC
+
+response-content-type: application/json;charset=UTF-8
+
+# When set to true - the database will be seeded with random data
+seed-db: false
