@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -53,18 +52,24 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.cors().and()
 				// Allow Cross Origin Resource Sharing
 				// Stateless on the Server Side - No Sessions
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//				.and().authorizeRequests()
 				// Public rest end points - anyone can use them
-				.antMatchers(HttpMethod.POST, "/users").permitAll() // Create new user rest api route
-				.antMatchers(HttpMethod.POST, "/users/login").permitAll() // Login user rest api route
+//				.antMatchers(HttpMethod.POST, "/users").permitAll() // Create new user rest api route
+//				.antMatchers(HttpMethod.POST, "/users/login").permitAll() // Login user rest api route
 				// All other rest end points require users to be authenticated (logged in users)
 				// or in other words those who send a valid jwt. Authorization rules are applied
 				// in Controller Class(es)
-				.anyRequest().authenticated().and().exceptionHandling()
-				.authenticationEntryPoint(jwtAuthenticationEntryPoint)
+//				.anyRequest().authenticated()
+				.and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
 				// Run jwtAuthorizationFilter Filter before UsernamePasswordAuthenticationFilter
 				.and().addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 
+		// As is now by default Rest Api Endpoints are public, accessible by anyone
+		// without authorization, unless we apply class/method security restrictions.
+		// If we want to define here the public rest endpoints and lock the rest Rest
+		// Api Endpoints here or using class/method security restrictions we can
+		// uncomment the above 4 lines and perform the necessary changes
 	}
 
 	@Bean
