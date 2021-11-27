@@ -60,8 +60,8 @@ If someone tries to login many times in a short period with wrong password his a
 
 ## Versions used
 * MySQL v8.0.26
-* Spring Boot v2.5.4
-* Java v16.0.1
+* Spring Boot v2.6.0
+* Java v17
 
 
 
