@@ -21,7 +21,6 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.JWTVerifier;
 
 import gr.spyrosalertas.usermanagementdemo.configuration.UserPrincipal;
-import gr.spyrosalertas.usermanagementdemo.exception.InvalidTokenException;
 
 @Component
 public class JwtProvider {
@@ -55,18 +54,18 @@ public class JwtProvider {
 		return token;
 	}
 
-	// Check if given token is valid
+	// Check if given token is valid - invalid or expired tokens return false
 	boolean isTokenValid(String token) {
 		Algorithm algorithm = Algorithm.HMAC256(secret.getBytes());
 		try {
 			JWTVerifier jwtVerifier = JWT.require(algorithm).withIssuer(issuer).build();
 			jwtVerifier.verify(token);
 		} catch (TokenExpiredException e) {
-			// If token has expired
-			throw new TokenExpiredException("Token has expired");
+			// If token has expired - consider token invalid
+			return false;
 		} catch (JWTVerificationException e) {
 			// If token is invalid for any other reason (except expired tokens)
-			throw new InvalidTokenException();
+			return false;
 		}
 		// Else jwt is valid
 		return true;
