@@ -17,7 +17,7 @@ public class UserPrincipal implements UserDetails {
 
 	private User user;
 
-	private final static long accountLockTime = 60000;
+	private static final long accountUnlockTime = NonSpringPropertiesLoader.getAccountUnlockTime();
 
 	public UserPrincipal(User user) {
 		this.user = user;
@@ -50,7 +50,7 @@ public class UserPrincipal implements UserDetails {
 		// Account is considered unlocked when it's non locked or if cooldown/lock
 		// period has passed
 		long timePassed = Instant.now().toEpochMilli() - user.getLastLoginAttemptDate().toEpochMilli();
-		return user.isNonLocked() || timePassed > accountLockTime;
+		return user.isNonLocked() || timePassed > accountUnlockTime;
 	}
 
 	@Override
