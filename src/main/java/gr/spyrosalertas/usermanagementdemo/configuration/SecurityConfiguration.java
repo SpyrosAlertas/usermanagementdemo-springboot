@@ -1,7 +1,6 @@
 package gr.spyrosalertas.usermanagementdemo.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,8 +16,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import gr.spyrosalertas.usermanagementdemo.auth.JwtAuthenticationEntryPoint;
 import gr.spyrosalertas.usermanagementdemo.auth.JwtAuthorizationFilter;
@@ -70,32 +67,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		// If we want to define here the public rest endpoints and lock the rest Rest
 		// Api Endpoints here or using class/method security restrictions we can
 		// uncomment the above 4 lines and perform the necessary changes
-	}
 
-	@Bean
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurer() {
-
-			@Value("${origins}")
-			private String[] origins;
-
-			// Enable CORS for desired origins - also we have to expose the Authorization
-			// header to the client, else the client won't receive the jwt when he logins
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-
-				// Cors configuration will be applied to every rest end point
-				String mappingPattern = "/**";
-				// Methods we want to be allowed/exposed for use by our rest api
-				String[] allowedMethods = { "GET", "POST", "PUT", "DELETE", "OPTION" };
-				// A list of the headers we want to be allowed to the client
-				String[] exposedHeaders = { "Authorization" };
-
-				registry.addMapping(mappingPattern).allowedMethods(allowedMethods).allowedOrigins(origins)
-						.exposedHeaders(exposedHeaders);
-
-			}
-		};
 	}
 
 	// Spring Bean that creates the authentication provider

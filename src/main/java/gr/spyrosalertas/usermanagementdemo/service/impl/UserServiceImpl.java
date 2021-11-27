@@ -23,8 +23,6 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.event.AbstractAuthenticationFailureEvent;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -44,7 +42,7 @@ import gr.spyrosalertas.usermanagementdemo.service.UserService;
 @Service
 @Transactional
 @Qualifier("userDetailsService")
-class UserServiceImpl implements UserService, UserDetailsService {
+class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository userRepository;
@@ -340,23 +338,6 @@ class UserServiceImpl implements UserService, UserDetailsService {
 	}
 
 	// -- Other methods
-
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-		User user = userRepository.findUserByUsername(username);
-
-		if (user == null) {
-			// If there is no such user in our database throw error
-			throw new UsernameNotFoundException("No user with username " + username + " was found x");
-		}
-
-		// Here we only know whether the user exists, we don't know if provided password
-		// is correct/wrong
-
-		return new UserPrincipal(user);
-
-	}
 
 	// Authentication Login Success/Failure listeners
 
