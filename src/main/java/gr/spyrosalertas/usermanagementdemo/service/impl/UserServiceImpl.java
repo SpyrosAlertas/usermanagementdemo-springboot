@@ -419,7 +419,8 @@ class UserServiceImpl implements UserService {
 		// Account locked - we don't know if password is correct or wrong so we check it
 		// here -> password variable not null
 		if (!bCryptPasswordEncoder.matches(password, user.getPassword())) {
-			// If password was wrong
+			// If username is correct but password is wrong
+			user.setLastLoginAttemptDate(Instant.now());
 			if (timePassed < failedAttemptsPeriod) {
 				user.setFailedLoginAttempts(user.getFailedLoginAttempts() + 1);
 				if (user.getFailedLoginAttempts() >= this.failedAttemptsAllowed) {
@@ -431,9 +432,10 @@ class UserServiceImpl implements UserService {
 			} else {
 				// Reset failed login attempts - time period has passed
 				user.setFailedLoginAttempts(1);
-				user.setNonLocked(true);
+				if (timePassed > accountUnlockTime) {
+					user.setNonLocked(true);
+				}
 			}
-			user.setLastLoginAttemptDate(Instant.now());
 		}
 
 		userRepository.save(user);
